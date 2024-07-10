@@ -1,9 +1,12 @@
 package it.corso.dto;
 
+import it.corso.model.NomeCategoria;
 
 public class CategoryDto {
     private int id;
-    private String categoryName;
+    private NomeCategoria nomeCategoria;
+
+    // Getters and Setters
 
     public int getId() {
         return id;
@@ -13,13 +16,11 @@ public class CategoryDto {
         this.id = id;
     }
 
-	public String getCategoryName() {
-		return categoryName;
-	}
+    public NomeCategoria getNomeCategoria() {
+        return nomeCategoria;
+    }
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-    
+    public void setNomeCategoria(NomeCategoria nomeCategoria) {
+        this.nomeCategoria = nomeCategoria;
+    }
 }

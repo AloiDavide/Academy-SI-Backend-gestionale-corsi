@@ -8,7 +8,8 @@ public class CourseDto {
     private String shortDescription;
     private String fullDescription;
     private int duration;
-    private String categoryName;
+    private CategoryDto category;
+    private List<UserDto> users;
 
     
 
@@ -52,17 +53,19 @@ public class CourseDto {
         this.duration = duration;
     }
 
-	public String getCategoryName() {
-		return categoryName;
-	}
+    public CategoryDto getCategory() {
+        return category;
+    }
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
+    public void setCategory(CategoryDto category) {
+        this.category = category;
+    }
 
+    public List<UserDto> getUsers() {
+        return users;
+    }
 
-
-    
-
-
+    public void setUsers(List<UserDto> users) {
+        this.users = users;
+    }
 }

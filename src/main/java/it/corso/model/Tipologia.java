@@ -1,6 +1,6 @@
 package it.corso.model;
 
-public enum Typology {
+public enum Tipologia {
 	Admin,
 	Utente,
 	Docente

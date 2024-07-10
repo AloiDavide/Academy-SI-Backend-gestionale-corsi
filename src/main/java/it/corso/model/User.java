@@ -120,6 +120,5 @@ public class User {
 	public void setCourses(List<Course> corsi) {
 		this.courses = corsi;
 	}
-	
 
 }

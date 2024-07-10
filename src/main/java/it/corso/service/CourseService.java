@@ -1,10 +1,8 @@
 package it.corso.service;
-import java.util.Collection;
 import java.util.List;
 
 import it.corso.dto.CourseDto;
 import it.corso.dto.CourseUpdateDto;
-import it.corso.model.Category;
 import it.corso.model.Course;
 
 public interface CourseService {
@@ -14,8 +12,4 @@ public interface CourseService {
 	void updateCourse(CourseUpdateDto corso);
 	void deleteCourse(int id);
 	CourseDto getCourseDTOById(int id);
-	Collection<CourseDto> searchByNameAndCategoryId(String name, Category category);
-	List<CourseDto> findByCategory(int id);
-	void deleteByCategory(int id);
-	
 }

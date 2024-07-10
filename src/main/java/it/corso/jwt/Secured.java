@@ -11,5 +11,5 @@ import jakarta.ws.rs.NameBinding;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface Secured {
-	String role() default "Utente";
+	String role() default "all";
 }

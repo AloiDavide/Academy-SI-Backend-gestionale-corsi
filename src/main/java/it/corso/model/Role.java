@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 
 
 //inserimento ruolo a mano, dopo che inserisci un utente
@@ -31,7 +32,7 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPOLOGIA")
-    private Typology typology;
+    private Tipologia tipologia;
     
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinTable
@@ -51,14 +52,12 @@ public class Role {
 		this.id = id;
 	}
 
-	
-
-	public Typology getTypology() {
-		return typology;
+	public Tipologia getTipologia() {
+		return tipologia;
 	}
 
-	public void setTypology(Typology typology) {
-		this.typology = typology;
+	public void setTipologia(Tipologia type) {
+		this.tipologia = type;
 	}
 
 	public List<User> getUsers() {
@@ -69,5 +68,5 @@ public class Role {
 		this.users = roles;
 	}
 
-	
+
 }

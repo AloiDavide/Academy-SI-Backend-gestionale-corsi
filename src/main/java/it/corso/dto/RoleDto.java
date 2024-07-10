@@ -1,27 +1,26 @@
 package it.corso.dto;
 
-import java.util.List;
-
-import it.corso.model.Typology;
+import it.corso.model.Tipologia; // Adjust the import according to your package structure
 
 public class RoleDto {
     private int id;
-    private Typology typology;
+    private Tipologia tipologia;
+
+    // Getters and Setters
 
     public int getId() {
         return id;
     }
 
-    public Typology getTypology() {
-		return typology;
-	}
-
-	public void setTypology(Typology typology) {
-		this.typology = typology;
-	}
-
-	public void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
+    public Tipologia getTipologia() {
+        return tipologia;
+    }
+
+    public void setTipologia(Tipologia tipologia) {
+        this.tipologia = tipologia;
+    }
 }

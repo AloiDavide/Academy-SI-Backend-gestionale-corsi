@@ -10,7 +10,7 @@ import jakarta.ws.rs.ApplicationPath;
 @ApplicationPath("api")
 public class JerseyConfig extends ResourceConfig {
 	
-	// specify what packages jersey should scan
+	//stiamo dicendo a jersey dove cercare il nostro progetto
 	public JerseyConfig() {
 		packages("it.corso");
 	}

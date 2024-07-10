@@ -24,9 +24,9 @@ public class Category {
 	private int id;
 	
 	@Column(name="Nome_Categoria")
-	private String categoryName;
+	@Enumerated(EnumType.STRING)
+	private NomeCategoria nomeCategoria;
 	
-
 	@OneToMany
 	(
 		cascade = CascadeType.REFRESH,
@@ -35,31 +35,4 @@ public class Category {
 		orphanRemoval = true		
 	)
 	private List<Course> courses = new ArrayList<>();
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	
-
-	public String getCategoryName() {
-		return categoryName;
-	}
-
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-
-	public List<Course> getCourses() {
-		return courses;
-	}
-
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
-	}
-
 }
