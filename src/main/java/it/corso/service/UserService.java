@@ -17,5 +17,6 @@ public interface UserService {
 	boolean existsUserByEmail(String email);
 	boolean login(UserLoginRequestDto userLoginRequestDto);
 	void userSignup(UserSignupDto userSignupDto);
+	void subscribeToCourse(String email, int courseId);
 	
 }

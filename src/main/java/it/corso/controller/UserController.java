@@ -157,6 +157,21 @@ public class UserController {
 	        return Response.status(Response.Status.BAD_REQUEST).build();
 	    }
 	}
+	
+	@PUT
+	@Path("/{email}/subscribe/{courseId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response subscribeToCourse(@PathParam("email") String email, @PathParam("courseId") int courseId) {
+		try {
+			userService.subscribeToCourse(email, courseId);
+			return Response.status(Response.Status.OK).build();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+	}
 
 	@GET
 	@Path("/get/{email}")

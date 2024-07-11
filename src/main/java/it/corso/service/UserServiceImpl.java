@@ -24,6 +24,7 @@ import it.corso.model.Course;
 import it.corso.model.Role;
 import it.corso.model.User;
 
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -191,6 +192,21 @@ public class UserServiceImpl implements UserService {
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public void subscribeToCourse(String email, int courseId) throws NoSuchElementException{
+		User user = this.userDao.findByMail(email).get();
+		Course course = this.courseDao.findById(courseId).get();
+		
+		//if (user.getCourses().contains(course)) {
+			//throw new AlreadySub
+			
+		//}
+		
+		user.getCourses().add(course);
+		userDao.save(user);
+		
 	}
 
 
