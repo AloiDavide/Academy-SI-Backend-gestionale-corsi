@@ -23,6 +23,8 @@ import it.corso.dto.UserUpdateDto;
 import it.corso.model.Course;
 import it.corso.model.Role;
 import it.corso.model.User;
+import it.corso.exceptions.AreadySubscribedException;
+import it.corso.exceptions.ObjectNotFoundException;
 
 
 @Service
@@ -37,7 +39,26 @@ public class UserServiceImpl implements UserService {
 	
 	private ModelMapper modelMapper = new ModelMapper();
 	
-	
+	//I make my own mapper method because some fields need to be modified
+	//between the model object and the dto.
+	private UserDto userToDto(User user) {
+	    UserDto userDto = modelMapper.map(user, UserDto.class);
+	    
+	    userDto.setCoursesIds(
+	    		user.getCourses().stream()
+	    		.map(Course::getId)
+	    		.collect(Collectors.toList())
+	    		);
+	    
+	    
+	    userDto.setRolesIds(
+	    		user.getRoles().stream()
+	    		.map(Role::getId)
+	    		.collect(Collectors.toList())
+	    		);
+		    
+	    return userDto;
+	}	
 
 	@Override
 	public void userSignup(UserSignupDto userSignupDto) throws NoSuchElementException {
@@ -116,21 +137,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUserByMail(String email) {
+	public User getUserByMail(String email) throws ObjectNotFoundException {
 		
 		Optional<User> optional = userDao.findByMail(email);
 		
-		if(optional.isPresent())
-	        return optional.get();
+		if(optional.isPresent()) {
+			return optional.get();
+		}
+	        
 		
-		return new User();
+		throw new ObjectNotFoundException();
 	}
 	
 
 
 	
 	@Override
-	public UserDto getUserDtoByMail(String email) {
+	public UserDto getUserDtoByMail(String email) throws ObjectNotFoundException  {
 		
 		Optional<User> optional = userDao.findByMail(email);
 		
@@ -139,7 +162,7 @@ public class UserServiceImpl implements UserService {
 	        return this.userToDto(user);
 		}
 		
-		return new UserDto();
+		throw new ObjectNotFoundException();
 	}
 	
 	@Override
@@ -151,28 +174,6 @@ public class UserServiceImpl implements UserService {
                     );
     }
 	
-	
-	
-	//I make my own mapper method because some fields need to be modified
-	//between the model object and the dto.
-	private UserDto userToDto(User user) {
-	    UserDto userDto = modelMapper.map(user, UserDto.class);
-	    
-	    userDto.setCoursesIds(
-	    		user.getCourses().stream()
-	    		.map(Course::getId)
-	    		.collect(Collectors.toList())
-	    		);
-	    
-	    
-	    userDto.setRolesIds(
-	    		user.getRoles().stream()
-	    		.map(Role::getId)
-	    		.collect(Collectors.toList())
-	    		);
-	    
-	    return userDto;
-	}
 	
 
 	@Override
@@ -195,20 +196,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void subscribeToCourse(String email, int courseId) throws NoSuchElementException{
+	public void subscribeToCourse(String email, int courseId) throws NoSuchElementException, AreadySubscribedException{
 		User user = this.userDao.findByMail(email).get();
 		Course course = this.courseDao.findById(courseId).get();
 		
-		//if (user.getCourses().contains(course)) {
-			//throw new AlreadySub
-			
-		//}
+		if (user.getCourses().contains(course)) {
+			throw new AreadySubscribedException();
+		}
 		
 		user.getCourses().add(course);
 		userDao.save(user);
 		
 	}
 
+	@Override
+	public void unsubscribeFromCourse(String email, int courseId) throws NoSuchElementException{
+		User user = this.userDao.findByMail(email).get();
+		Course course = this.courseDao.findById(courseId).get();
+		
+		//possibly throw an exception if the user wasn't subbed
+
+		user.getCourses().remove(course);
+		userDao.save(user);
+		
+	}
 
 
 

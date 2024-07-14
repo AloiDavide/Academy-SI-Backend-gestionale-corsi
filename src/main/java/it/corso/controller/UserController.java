@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import it.corso.dto.UserLoginRequestDto;
 import it.corso.dto.UserLoginResponseDto;
 import it.corso.dto.UserSignupDto;
 import it.corso.dto.UserUpdateDto;
+import it.corso.exceptions.ObjectNotFoundException;
+import it.corso.jwt.JWTTokenNeeded;
+import it.corso.jwt.Secured;
 import it.corso.model.Role;
 import it.corso.model.User;
 import it.corso.service.CourseService;
@@ -75,7 +79,12 @@ public class UserController {
 		Key key = Keys.hmacShaKeyFor(secret);
 		
 		//use a HashMap to make a dictionary of the user's data
-		User userInfo = userService.getUserByMail(email);
+		User userInfo = null;
+		try {
+			userInfo = userService.getUserByMail(email);
+		} catch (ObjectNotFoundException e) {
+			e.printStackTrace();
+		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("nome", userInfo.getName());
 		map.put("cognome", userInfo.getLastname());
@@ -166,12 +175,32 @@ public class UserController {
 		try {
 			userService.subscribeToCourse(email, courseId);
 			return Response.status(Response.Status.OK).build();
-		}
-		catch (Exception e){
-			e.printStackTrace();
-			return Response.status(Response.Status.BAD_REQUEST).build();
-		}
+		} catch (NoSuchElementException e) {
+	        return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+	    }
 	}
+	
+	
+	@PUT
+	@Path("/{email}/unsubscribe/{courseId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response unsubscribeFromCourse(@PathParam("email") String email, @PathParam("courseId") int courseId) {
+		try {
+			userService.unsubscribeFromCourse(email, courseId);
+			return Response.status(Response.Status.OK).build();
+			
+		} catch (NoSuchElementException e) {
+	        return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+	    }
+	}
+
 
 	@GET
 	@Path("/get/{email}")
@@ -189,6 +218,7 @@ public class UserController {
 	    }
 	}
 
+	
 	@GET
 	@Path("/get/all")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -203,7 +233,7 @@ public class UserController {
 	}
 
 	@DELETE
-	@Path("/delete/{email}") // this should be based on email
+	@Path("/delete/{email}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteUser(@Valid @PathParam("email") String email) {
@@ -215,20 +245,7 @@ public class UserController {
 	    }
 	}
 	
-	
-//	@PUT
-//	@Path("/{userId}/course/{courseId}/subscribe")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public Response subscribeToCourse(@PathParam(value = "userId") int userId, @PathParam(value = "courseId") int courseId) {
-//	    try {
-//	    	userService.subscribeToCourse(userId, courseId);
-//	        
-//	        return Response.status(Response.Status.OK).build();
-//	    } catch (Exception e) {
-//	        return Response.status(Response.Status.BAD_REQUEST).build();
-//	    }
-//	}
+
 	
 }
 

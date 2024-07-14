@@ -29,8 +29,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-//@JWTTokenNeeded
-//@Secured(role = "Admin")
+
 @Path("/course")
 public class CourseController {
 	@Autowired
@@ -77,6 +76,8 @@ public class CourseController {
         }
     }
 
+    @JWTTokenNeeded
+    @Secured(role = "Admin")
     @POST
     @Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -90,6 +91,9 @@ public class CourseController {
         }
     }
 
+    
+    @JWTTokenNeeded
+    @Secured(role = "Admin")
     @PUT
     @Path("/update")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -103,6 +107,9 @@ public class CourseController {
         }
     }
 
+    
+    @JWTTokenNeeded
+    @Secured(role = "Admin")
     @DELETE
     @Path("/delete/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -116,34 +123,18 @@ public class CourseController {
         }
     }
     
-    /*
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Iterable<CourseDto> getAll(@QueryParam("name") String name, @QueryParam("categoryId") Long categoryId) {
-     ModelMapper modelMapper = new ModelMapper();
-     modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-     
-
-	Optional<Category> category = categoryService.getById(categoryId);
-     if(category.isEmpty()) {
-      return List.of();
-     }
-     
-     return courseService.searchByNameAndCategoryId(name, category.get()).stream().map((course) -> {
-      return modelMapper.map(course, CourseDto.class);
-     }).toList();
-    }
-     */
+    
+    @JWTTokenNeeded
+    @Secured(role = "Admin")
     @DELETE
     @Path("delete/byCategory/{id}")
-    public Response deleteCorsoByCategory(@PathParam("id") int catId) {
+    public Response deleteByCategory(@PathParam("id") int catId) {
     	try {
     		courseService.deleteByCategory(catId);
             return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        
     }
 
     

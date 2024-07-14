@@ -2,6 +2,7 @@ package it.corso.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -107,6 +108,24 @@ public class Course {
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(duration, fullDescription, id, name, shortDescription);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Course other = (Course) obj;
+		return duration == other.duration && Objects.equals(fullDescription, other.fullDescription) && id == other.id
+				&& Objects.equals(name, other.name) && Objects.equals(shortDescription, other.shortDescription);
 	}
 
 	
